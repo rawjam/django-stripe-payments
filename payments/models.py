@@ -829,6 +829,7 @@ class Charge(StripeObject):
     fee = models.DecimalField(decimal_places=2, max_digits=9, null=True)
     receipt_sent = models.BooleanField(default=False)
     charge_created = models.DateTimeField(null=True, blank=True)
+    metadata = models.TextField(null=True, blank=True)
 
     objects = ChargeManager()
 
@@ -882,6 +883,7 @@ class Charge(StripeObject):
             obj.amount_refunded = convert_amount_for_db(data["amount_refunded"], obj.currency)
         if data["refunded"]:
             obj.amount_refunded = obj.amount
+        obj.metadata = data["metadata"]
         obj.save()
         return obj
 
