@@ -576,11 +576,12 @@ class Customer(StripeObject):
         return resp
 
     def charge(self, amount, currency="usd", description=None,
-               send_receipt=True, capture=True):
+               send_receipt=True, capture=True, metadata={}):
         """
         This method expects `amount` to be a Decimal type representing a
         dollar amount. It will be converted to cents so any decimals beyond
-        two will be ignored.
+        two will be ignored. Send additional (and optional) metadata along with
+        this charge, via the metadata argument.
         """
         if not isinstance(amount, decimal.Decimal):
             raise ValueError(
@@ -592,6 +593,7 @@ class Customer(StripeObject):
             customer=self.stripe_id,
             description=description,
             capture=capture,
+            metadata=metadata
         )
         obj = self.record_charge(resp["id"])
         if send_receipt:
